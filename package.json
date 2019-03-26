@@ -1,0 +1,22 @@
+{
+  "name": "task28",
+  "version": "1.0.0",
+  "description": "Weather App with NodeJS &amp; Vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quocviettran/task28.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/quocviettran/task28/issues"
+  },
+  "homepage": "https://github.com/quocviettran/task28#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
