@@ -1,20 +1,9 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <LandingPage msg="Welcome to Your Vue.js App"/>
-  </div>
+  <h1>hei</h1>
 </template>
 
 <script>
-/* import Components here */
-// @ is an alias to /src
-import LandingPage from "@/components/LandingPage/LandingPage.vue";
-
 export default {
-  name: "home",
-  /*Add components*/
-  components: {
-    LandingPage
-  }
+  components: {}
 };
 </script>
