@@ -1,9 +1,13 @@
 <template>
-  <h1>hei</h1>
+  <LandingPage/>
 </template>
 
 <script>
+import LandingPage from "@/components/LandingPage/LandingPage.vue";
+
 export default {
-  components: {}
+  components: {
+    LandingPage
+  }
 };
 </script>
