@@ -19,10 +19,7 @@
   "homepage": "https://github.com/quocviettran/task28#readme",
   "dependencies": {
     "express": "^4.16.4",
-<<<<<<< HEAD
-    "nodemon": "1.18.10"
-=======
+    "nodemon": "1.18.10",
     "leaflet": "^1.4.0"
->>>>>>> 954e8f78f9f4ed1932be9fc5435aaed0dc962a08
   }
 }
