@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+    </div>
     <v-card color="grey lighten-4" flat height="100%" tile>
       <v-toolbar dense>
         <v-toolbar-side-icon></v-toolbar-side-icon>
