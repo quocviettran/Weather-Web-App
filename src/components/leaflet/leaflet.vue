@@ -87,8 +87,10 @@ export default {
 
 <style>
 #mapid {
-  height: 500px;
-  width: 100%;
+  height: 45em;
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 1%;
 }
 .center {
   display: center;
