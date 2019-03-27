@@ -4,7 +4,6 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
     </div>
-    <router-view/>
     <v-card color="grey lighten-4" flat height="100%" tile>
       <v-toolbar dense>
         <v-toolbar-side-icon></v-toolbar-side-icon>

@@ -12,8 +12,7 @@
             <v-btn @click="searchLocation">Search</v-btn>
           </v-layout>
         </v-form>
-      </v-layout>
-    
+      </v-layout>  
   </div>
 </template>
 
@@ -30,7 +29,7 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "De4gSQukjG9OkTDNmm2kFMq8725A5yo2",
+      APIKEY: "Pw9UkAopueya1yAJ7RDP6kgZGupgSbbp",
       forecast: null,
       temperatureArray: null,
       todayArray: null,

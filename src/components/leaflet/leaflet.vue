@@ -6,7 +6,7 @@
         <div>
             <h1> THIS IS TEST </h1>
         </div>  
-        
+
         <div id="mapid"/>       
         <button @click="changeLocation"> New York</button> 
 
@@ -39,7 +39,7 @@
                 
                 //Instansiate a marker, and setting the start coordinate at Noroff
                 var marker = leaflet.marker([this.towns.lat, this.towns.lng]).addTo(this.mymap);
-                marker.bindPopup('Noroff AS').openPopup();
+                marker.bindPopup(this.towns.name).openPopup();
 
                 //Instansiate markers for all preloaded cities
                 //TODO Make for each
@@ -80,6 +80,7 @@
         changeLocation ()  {
             this.towns.lat = 40.779;
             this.towns.lng = -73.96;
+            this.towns.name = "New York";
             this.mymap.remove();
             this.initMap();
         }
