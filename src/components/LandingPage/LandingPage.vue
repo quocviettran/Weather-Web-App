@@ -69,6 +69,17 @@ export default {
         .then(response => {
           const forecast = response.data.DailyForecasts;
           const result = forecast.map(forecast => {
+            if (forecast.Day.Icon.toString.length === 2) {
+              forecast.Day.Icon =
+                "https://developer.accuweather.com/sites/default/files/" +
+                forecast.Day.Icon +
+                "-s.png";
+            } else {
+              forecast.Day.Icon =
+                "https://developer.accuweather.com/sites/default/files/0" +
+                forecast.Day.Icon +
+                "-s.png";
+            }
             return {
               date: forecast.Date,
               averageTemperature:
