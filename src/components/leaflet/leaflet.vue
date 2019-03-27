@@ -1,17 +1,6 @@
 <template>
   <div>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
-      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-      crossorigin
-    >
-    <div>
-      <h1>THIS IS TEST</h1>
-    </div>
-
     <div id="mapid"/>
-    <button @click="changeLocation">New York</button>
   </div>
 </template>
  <!-- Make sure you put this AFTER Leaflet's CSS -->
