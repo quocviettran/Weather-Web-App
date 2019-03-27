@@ -1,14 +1,6 @@
 <template>
   <div class="home">
-    <LandingPage msg="Welcome to Your Vue.js App"/>
-    <leaflet
-      class="center"
-      v-bind:towns="{
-      name: 'Trondheim',
-      lat: 63.42,
-      lng: 10.39,
-      temperature: 10}"
-    />
+    <LandingPage/>
   </div>
 </template>
 

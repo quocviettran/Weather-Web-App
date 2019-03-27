@@ -14,30 +14,40 @@
       </v-form>
     </v-layout>
     <Forecast :temperatureNow="temperatureNow" :temperatureArray="temperatureArray"/>
+    <leaflet
+      class="center"
+      v-bind:towns="{
+      name: localizedName,
+      lat: latitude,
+      lng: longtitude,
+      temperature: 10}"
+    />
   </div>
 </template>
 
 <script>
 import Forecast from "@/components/Forecast/Forecast.vue";
+import Leaflet from "@/components/leaflet/leaflet.vue";
 import axios from "axios";
 
 export default {
   name: "LandingPage",
   components: {
-    Forecast
+    Forecast,
+    Leaflet
   },
   data() {
     return {
       name: "forecast",
       APIKEY: "VGozpacgX8kpPwBfbARKKJFxtANGpuxZ",
       temperatureArray: "",
-      temperatureNow: "adasd",
+      temperatureNow: "",
       locationSearch: "",
       userInput: "",
       key: 254946,
       localizedName: "Oslo",
-      latitude: "",
-      longtitude: ""
+      latitude: 59.91,
+      longtitude: 10.75
     };
   },
   mounted() {
