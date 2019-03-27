@@ -43,7 +43,7 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "U1WeN4tIIhTreNtkmN1TiLR9FrGGaGhA",
+      APIKEY: "NUymEiY6InvgzytEW6ZRQMi6XQglI91P",
       temperatureArray: "",
       temperatureNow: "",
       locationSearch: "",
@@ -71,6 +71,17 @@ export default {
         .then(response => {
           const forecast = response.data.DailyForecasts;
           const result = forecast.map(forecast => {
+            if (forecast.Day.Icon.toString.length === 2) {
+              forecast.Day.Icon =
+                "https://developer.accuweather.com/sites/default/files/" +
+                forecast.Day.Icon +
+                "-s.png";
+            } else {
+              forecast.Day.Icon =
+                "https://developer.accuweather.com/sites/default/files/0" +
+                forecast.Day.Icon +
+                "-s.png";
+            }
             return {
               date: forecast.Date,
               averageTemperature:
