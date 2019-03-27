@@ -9,18 +9,20 @@
             placeholder="location"
             v-model="userInput"
           ></v-text-field>
-          <v-btn @click="searchLocation">Search</v-btn>
+          <v-btn @click="searchLocation()">Search</v-btn>
         </v-layout>
       </v-form>
     </v-layout>
-    <Forecast :temperatureNow="temperatureNow" :temperatureArray="temperatureArray"/>
+    <Forecast
+      :localizedName="localizedName"
+      :temperatureNow="temperatureNow"
+      :temperatureArray="temperatureArray"
+    />
     <leaflet
-      class="center"
-      v-bind:towns="{
-      name: localizedName,
-      lat: latitude,
-      lng: longitude,
-      temperature: 10}"
+      ref="leaflet_component"
+      :localizedName="localizedName"
+      :latitude="latitude"
+      :longitude="longitude"
     />
   </div>
 </template>
@@ -39,7 +41,7 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "U1WeN4tIIhTreNtkmN1TiLR9FrGGaGhA",
+      APIKEY: "NUymEiY6InvgzytEW6ZRQMi6XQglI91P",
       temperatureArray: "",
       temperatureNow: "",
       locationSearch: "",
@@ -50,8 +52,9 @@ export default {
       longitude: 10.75
     };
   },
-  mounted() {
-    this.searchLocation();
+  created() {
+    this.fetchData();
+    this.fetchCurrent();
   },
   methods: {
     fetchData() {
@@ -68,10 +71,11 @@ export default {
           const result = forecast.map(forecast => {
             return {
               date: forecast.Date,
-              maxTemperature: forecast.Temperature.Maximum.Value,
-              minTemperature: forecast.Temperature.Minimum.Value,
-              iconNight: forecast.Day.IconPhrase,
-              iconDay: forecast.Night.IconPhrase
+              averageTemperature:
+                (forecast.Temperature.Maximum.Value +
+                  forecast.Temperature.Minimum.Value) /
+                2,
+              iconDay: forecast.Day.Icon
             };
           });
           this.temperatureArray = result;
@@ -87,7 +91,23 @@ export default {
             "&metric=true&details=true"
         )
         .then(response => {
-          this.temperatureNow = response.data[0].Temperature.Value;
+          this.temperatureNow = {
+            temperature: response.data[0].Temperature.Value,
+            icon: ""
+          };
+          if (response.data[0].WeatherIcon.toString().length === 2) {
+            this.temperatureNow.icon =
+              "https://developer.accuweather.com/sites/default/files/" +
+              response.data[0].WeatherIcon +
+              "-s.png";
+          } else {
+            this.temperatureNow.icon =
+              "https://developer.accuweather.com/sites/default/files/0" +
+              response.data[0].WeatherIcon +
+              "-s.png";
+          }
+          //Run an update to leaflet component
+          this.$refs.leaflet_component.initMap();
         });
     },
     searchLocation() {
@@ -117,26 +137,4 @@ export default {
     }
   }
 };
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.middle {
-  display: center;
-}
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
 </script>

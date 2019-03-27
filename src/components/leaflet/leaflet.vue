@@ -1,43 +1,38 @@
 <template>
   <div>
     <div id="mapid"/>
-    <v-btn @click="changeLocation()"> Go to location </v-btn>
   </div>
 </template>
- <!-- Make sure you put this AFTER Leaflet's CSS -->
-
 <script>
 import leaflet from "leaflet";
 
 export default {
   name: "leaf",
-  props: {
-    towns: Object,
-    allLocations: Array
-  },
-  update(){
-      this.changeLocation();
-  },
+  props: ["localizedName", "latitude", "longitude"],
   mounted() {
     this.initMap();
   },
+  beforeUpdated() {
+    console.log("Updated");
+    this.changeLocation();
+  },
   methods: {
     initMap() {
-      //Instansiate a map 
+      //Instansiate a map
       var container = leaflet.DomUtil.get("mapid");
-      console.log(container);
-      if(container != null){
-          container._leaflet_id=null;
+      if (container != null) {
+        container._leaflet_id = null;
       }
-       let mymap =  leaflet.map("mapid").setView([this.towns.lat, this.towns.lng], 10)
-       console.log(this.towns.lat + ' ' + this.towns.lng);
+      let mymap = leaflet
+        .map("mapid")
+        .setView([this.latitude, this.longitude], 14);
+      console.log(this.latitude + " " + this.longitude);
       //Instansiate a marker, and setting the start coordinate at Noroff
-      var marker = leaflet
-        .marker([this.towns.lat, this.towns.lng])
-        .addTo(mymap);
-      marker.bindPopup(this.towns.name).openPopup();
+      var marker = leaflet.marker([this.latitude, this.longitude]).addTo(mymap);
+      marker.bindPopup(this.localizedName).openPopup();
 
       //Instansiate markers for all preloaded cities
+
       //TODO Make for each
       /* leaflet.marker([this.towns.lat, this.towns.lng])
                     .addTo(mymap)
@@ -48,8 +43,6 @@ export default {
       //Marker on the clicked coordinate
       let mark;
       mymap.on("click", function(e) {
-        console.log(e.latlng);
-
         if (mark != null) {
           mark.remove();
         }
@@ -72,16 +65,14 @@ export default {
               "pk.eyJ1Ijoid29raW5nIiwiYSI6ImNqdHByejVjcjA3Nm80ZHIwZTgydDA0aWYifQ.A7Nu-j7baTtMJnjPzrTlNA"
           }
         )
-        .addTo(mymap); 
+        .addTo(mymap);
     }, //End of initMap
 
-    removeMap(mymap){
-        console.log(mymap);
-        if(mymap!=null)
-            mymap.remove();
+    removeMap(mymap) {
+      if (mymap != null) mymap.remove();
     },
-    changeLocation() {  
-        this.initMap();
+    changeLocation() {
+      this.initMap();
     }
   }
 };
@@ -89,10 +80,10 @@ export default {
 
 <style>
 #mapid {
-  height: 500px;
-  width: 50%;
-  margin-top:10px;
-  margin-left: 25%;
+  height: 45em;
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 1%;
 }
 .center {
   display: center;
