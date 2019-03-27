@@ -4,6 +4,7 @@
       <v-form ref="form">
         <v-layout row wrap>
           <v-text-field
+            @keyup.enter="searchLocation()"
             class="centered-input text--darken-3 mt-3"
             label="Location Name"
             placeholder="location"
@@ -41,9 +42,9 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "NUymEiY6InvgzytEW6ZRQMi6XQglI91P",
+      APIKEY: "bU3YrXCADsTUOyElNTta8c9BPd7IvZmJ",
       temperatureArray: "",
-      temperatureNow: "",
+      temperatureNow: null,
       locationSearch: "",
       userInput: "",
       key: 254946,
@@ -68,8 +69,9 @@ export default {
         )
         .then(response => {
           const forecast = response.data.DailyForecasts;
-          const result = forecast.map(forecast => {
-            if (forecast.Day.Icon.toString.length === 2) {
+          this.temperatureArray = forecast.map(forecast => {
+            //Pre fix icon 
+            if (forecast.Day.Icon >= 10) {
               forecast.Day.Icon =
                 "https://developer.accuweather.com/sites/default/files/" +
                 forecast.Day.Icon +
@@ -80,16 +82,15 @@ export default {
                 forecast.Day.Icon +
                 "-s.png";
             }
+            //Pre fix date format
+            var date = new Date(forecast.Date);
+            forecast.Date = date.getDate() + "/" + (date.getMonth()+1); 
             return {
               date: forecast.Date,
-              averageTemperature:
-                (forecast.Temperature.Maximum.Value +
-                  forecast.Temperature.Minimum.Value) /
-                2,
+              maxTemperature: forecast.Temperature.Maximum.Value,
               iconDay: forecast.Day.Icon
             };
           });
-          this.temperatureArray = result;
         });
     },
     fetchCurrent() {

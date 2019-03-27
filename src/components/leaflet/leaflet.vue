@@ -12,10 +12,6 @@ export default {
   mounted() {
     this.initMap();
   },
-  beforeUpdated() {
-    console.log("Updated");
-    this.changeLocation();
-  },
   methods: {
     initMap() {
       //Instansiate a map
@@ -26,19 +22,9 @@ export default {
       let mymap = leaflet
         .map("mapid")
         .setView([this.latitude, this.longitude], 14);
-      console.log(this.latitude + " " + this.longitude);
       //Instansiate a marker, and setting the start coordinate at Noroff
       var marker = leaflet.marker([this.latitude, this.longitude]).addTo(mymap);
       marker.bindPopup(this.localizedName).openPopup();
-
-      //Instansiate markers for all preloaded cities
-
-      //TODO Make for each
-      /* leaflet.marker([this.towns.lat, this.towns.lng])
-                    .addTo(mymap)
-                    .bindPopup(this.towns.name + "<br/>" + ' Temperature ' + this.towns.temperature)
-                    .openPopup();
-                */
 
       //Marker on the clicked coordinate
       let mark;
