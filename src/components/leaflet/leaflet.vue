@@ -6,9 +6,8 @@
         <div>
             <h1> THIS IS TEST </h1>
         </div>  
-        <div id="mapid">
-            
-        </div>
+        
+        <div id="mapid"/>       
         <button @click="changeLocation"> New York</button> 
 
     </div>

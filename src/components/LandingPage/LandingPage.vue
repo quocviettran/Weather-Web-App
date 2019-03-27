@@ -1,9 +1,6 @@
 <template>
   <div class="hello middle">
-    <h1>{{ msg }}</h1>
-
     <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>
-  <div class="hello">
     <v-layout align-center justify-center>
       <v-form ref="form">
         <v-layout row wrap>
@@ -11,13 +8,12 @@
             class="centered-input text--darken-3 mt-3"
             label="Location Name"
             placeholder="location"
-            v-model="userInput"
-          ></v-text-field>
-          <v-btn @click="searchLocation">Search</v-btn>
-        </v-layout>
-      </v-form>
-    </v-layout>
-    <Forecast/>
+            v-model="userInput"/>
+            <v-btn @click="searchLocation">Search</v-btn>
+          </v-layout>
+        </v-form>
+      </v-layout>
+    
   </div>
 </template>
 
