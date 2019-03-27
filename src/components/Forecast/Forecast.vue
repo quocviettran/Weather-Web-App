@@ -1,5 +1,7 @@
+
 <template>
   <div class="forecast">
+    <!--
     <v-layout>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -23,7 +25,27 @@
           </div>
         </v-card>
       </v-flex>
-    </v-layout>
+      
+    </v-layout>-->
+    <v-expansion-panel>
+      <v-expansion-panel-content>
+        <template v-slot:header>
+          <div>Weather</div>
+        </template>
+        <v-card>
+          <v-expansion-panel v-model="panel" expand>
+            <v-expansion-panel-content v-for="(item,i) in 5" :key="i">
+              <template v-slot:header>
+                <div>Today</div>
+              </template>
+              <v-card>
+                <v-card-text>Lorem ipsum dolor sit amet, consec'tetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
   </div>
 </template>
 
@@ -31,8 +53,6 @@
 import axios from "axios";
 export default {
   name: "forecast",
-  today: {},
-  tomorrow: {},
   data() {
     return {
       APIKEY: "De4gSQukjG9OkTDNmm2kFMq8725A5yo2",
@@ -44,8 +64,8 @@ export default {
     };
   },
   created() {
-    this.fetchData();
-    this.fetchCurrent();
+    //this.fetchData();
+    //this.fetchCurrent();
   },
   methods: {
     fetchData() {
@@ -87,3 +107,11 @@ export default {
   }
 };
 </script>
+
+<style>
+.forecast {
+  display: flex;
+  flex-flow: row wrap;
+  text-align: center;
+}
+</style>
