@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "VGozpacgX8kpPwBfbARKKJFxtANGpuxZ",
+      APIKEY: "rp5i98OY2Mn1WiSXAyxrp4kw5KXMTraS",
       temperatureArray: "",
       temperatureNow: "",
       locationSearch: "",
