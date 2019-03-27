@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
     <LandingPage msg="Welcome to Your Vue.js App"/>
     <leaflet
       class="center"
@@ -29,7 +28,6 @@ export default {
   },
   components: {
     LandingPage,
-    Forecast,
     leaflet
   }
 };
