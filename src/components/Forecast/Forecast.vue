@@ -1,4 +1,3 @@
-
 <template>
   <div class="forecast">
     <v-expansion-panel>

@@ -1,6 +1,5 @@
 <template>
   <div class="hello middle">
-    <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>
     <v-layout align-center justify-center>
       <v-form ref="form">
         <v-layout row wrap>
