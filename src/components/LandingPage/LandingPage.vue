@@ -13,7 +13,7 @@
         </v-layout>
       </v-form>
     </v-layout>
-    <Forecast/>
+    <Forecast :temperatureNow="temperatureNow" :temperatureArray="temperatureArray"/>
   </div>
 </template>
 
@@ -29,18 +29,19 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "De4gSQukjG9OkTDNmm2kFMq8725A5yo2",
-      forecast: null,
-      temperatureArray: null,
-      todayArray: null,
-      current: null,
-      locationSearch: null,
+      APIKEY: "VGozpacgX8kpPwBfbARKKJFxtANGpuxZ",
+      temperatureArray: "",
+      temperatureNow: "adasd",
+      locationSearch: "",
       userInput: "",
       key: 254946,
       localizedName: "Oslo",
       latitude: "",
       longtitude: ""
     };
+  },
+  mounted() {
+    this.searchLocation();
   },
   methods: {
     fetchData() {
@@ -53,8 +54,8 @@ export default {
             "&metric=true"
         )
         .then(response => {
-          this.forecast = response.data.DailyForecasts;
-          const result = this.forecast.map(forecast => {
+          const forecast = response.data.DailyForecasts;
+          const result = forecast.map(forecast => {
             return {
               date: forecast.Date,
               maxTemperature: forecast.Temperature.Maximum.Value,
@@ -76,7 +77,7 @@ export default {
             "&metric=true&details=true"
         )
         .then(response => {
-          this.current = response.data[0].Temperature.Value;
+          this.temperatureNow = response.data[0].Temperature.Value;
         });
     },
     searchLocation() {
@@ -89,13 +90,16 @@ export default {
             this.userInput
         )
         .then(response => {
-          this.locationSearch = response;
-          this.key = this.locationSearch.data[0].Key;
-          this.localizedName = this.locationSearch.data[0].LocalizedName;
-          this.latitude = this.locationSearch.data[0].GeoPosition.Latitude;
-          this.longtitude = this.locationSearch.data[0].GeoPosition.Longtitude;
-          this.fetchData();
-          this.fetchCurrent();
+          if (response.data.length !== 0) {
+            this.locationSearch = response;
+            this.key = this.locationSearch.data[0].Key;
+            this.localizedName = this.locationSearch.data[0].LocalizedName;
+            this.latitude = this.locationSearch.data[0].GeoPosition.Latitude;
+            this.longtitude = this.locationSearch.data[0].GeoPosition.Longtitude;
+            // Fetch with location key
+            this.fetchData();
+            this.fetchCurrent();
+          }
         })
         .catch(error => {
           console.log(error);
