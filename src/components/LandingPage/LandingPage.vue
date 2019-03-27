@@ -19,7 +19,7 @@
       v-bind:towns="{
       name: localizedName,
       lat: latitude,
-      lng: longtitude,
+      lng: longitude,
       temperature: 10}"
     />
   </div>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "rp5i98OY2Mn1WiSXAyxrp4kw5KXMTraS",
+      APIKEY: "U1WeN4tIIhTreNtkmN1TiLR9FrGGaGhA",
       temperatureArray: "",
       temperatureNow: "",
       locationSearch: "",
@@ -47,7 +47,7 @@ export default {
       key: 254946,
       localizedName: "Oslo",
       latitude: 59.91,
-      longtitude: 10.75
+      longitude: 10.75
     };
   },
   mounted() {
@@ -105,7 +105,7 @@ export default {
             this.key = this.locationSearch.data[0].Key;
             this.localizedName = this.locationSearch.data[0].LocalizedName;
             this.latitude = this.locationSearch.data[0].GeoPosition.Latitude;
-            this.longtitude = this.locationSearch.data[0].GeoPosition.Longtitude;
+            this.longitude = this.locationSearch.data[0].GeoPosition.Longitude;
             // Fetch with location key
             this.fetchData();
             this.fetchCurrent();

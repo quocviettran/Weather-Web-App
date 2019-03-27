@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="mapid"/>
+    <v-btn @click="changeLocation()"> Go to location </v-btn>
   </div>
 </template>
  <!-- Make sure you put this AFTER Leaflet's CSS -->
@@ -11,7 +12,11 @@ import leaflet from "leaflet";
 export default {
   name: "leaf",
   props: {
-    towns: Object
+    towns: Object,
+    allLocations: Array
+  },
+  update(){
+      this.changeLocation();
   },
   mounted() {
     this.initMap();
@@ -19,7 +24,13 @@ export default {
   methods: {
     initMap() {
       //Instansiate a map 
+      var container = leaflet.DomUtil.get("mapid");
+      console.log(container);
+      if(container != null){
+          container._leaflet_id=null;
+      }
        let mymap =  leaflet.map("mapid").setView([this.towns.lat, this.towns.lng], 10)
+       console.log(this.towns.lat + ' ' + this.towns.lng);
       //Instansiate a marker, and setting the start coordinate at Noroff
       var marker = leaflet
         .marker([this.towns.lat, this.towns.lng])
@@ -69,10 +80,8 @@ export default {
         if(mymap!=null)
             mymap.remove();
     },
-    changeLocation(mymap) {
-        this.towns.lat = 40.779;
-        this.towns.lng = -73.96;
-        this.towns.name = "New York";
+    changeLocation() {  
+        this.initMap();
     }
   }
 };
