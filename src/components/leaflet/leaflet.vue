@@ -7,8 +7,9 @@
             <h1> THIS IS TEST </h1>
         </div>  
         <div id="mapid">
-
+            
         </div>
+        <button @click="changeLocation"> New York</button> 
 
     </div>
 </template>
@@ -20,33 +21,50 @@
     export default {
         name: "leaf",
         props: {
-            lat: Number,
-            long: Number
+            towns: Object
+        },
+        data(){
+            return{
+                mymap:null
+            }
         },
         mounted(){
             this.initMap();
                
         },
         methods: {
-            initMap() {
-                console.log(this.lat);
-                console.log(this.long);
-                
+            initMap() {                
                 
                 //Instansiate a map
-                const mymap = leaflet.map('mapid').setView([this.lat, this.long],4);
+                this.mymap = leaflet.map('mapid').setView([this.towns.lat,this.towns.lng],10);
                 
                 //Instansiate a marker, and setting the start coordinate at Noroff
-                var marker = leaflet.marker([this.lat, this.long]).addTo(mymap);
+                var marker = leaflet.marker([this.towns.lat, this.towns.lng]).addTo(this.mymap);
                 marker.bindPopup('Noroff AS').openPopup();
 
+                //Instansiate markers for all preloaded cities
+                //TODO Make for each
+               /* leaflet.marker([this.towns.lat, this.towns.lng])
+                    .addTo(mymap)
+                    .bindPopup(this.towns.name + "<br/>" + ' Temperature ' + this.towns.temperature)
+                    .openPopup();
+                */
+            
                 //Marker on the clicked coordinate
-                //TODO
-                mymap.on('click',function(e){
+                //TODOj
+                let mark;
+                this.mymap.on('click',function(e){
                     console.log(e.latlng);
+                    
                     //TODO: ASK TEAM 
-                    //leaflet.marker(e.latlng).addTo(mymap);
+                    if(mark != null){
+                        mark.remove();
+                    } 
+                    mark = leaflet.marker(e.latlng);
+                    mark.addTo(this.mymap).bindPopup().openPopup();                  
                 })
+
+                
 
                 
                 this.tileLayer = leaflet.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -54,12 +72,18 @@
                     maxZoom: 18,
                     id: 'mapbox.streets',
                     accessToken: 'pk.eyJ1Ijoid29raW5nIiwiYSI6ImNqdHByejVjcjA3Nm80ZHIwZTgydDA0aWYifQ.A7Nu-j7baTtMJnjPzrTlNA'
-                }).addTo(mymap);
-                
-                console.log(marker);
+                }).addTo(this.mymap);
                 
                 
             }, //End of initMap
+
+              
+        changeLocation ()  {
+            this.towns.lat = 40.779;
+            this.towns.lng = -73.96;
+            this.mymap.remove();
+            this.initMap();
+        }
             
 
         }
