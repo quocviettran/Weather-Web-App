@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="mapid"/>
-    <button @click="changeLocation">New York</button>
   </div>
 </template>
  <!-- Make sure you put this AFTER Leaflet's CSS -->
