@@ -1,48 +1,33 @@
 <template>
   <div class="forecast">
-      
     <v-layout>
-          
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
-
-
-        <v-card-title primary-title>
-          <div>
-            
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-card-title primary-title>
+            <div>Kvittering av:</div>
+          </v-card-title>
+          <h1>Oslo</h1>
+          <h3>Todays forecast</h3>
+          <div>Current Temperature {{current}}</div>------------------------------------------------
+          <v-card-actions></v-card-actions>
+          <div>Minimum Temperature</div>
+          <div>{{temperatureArray[0].minTemperature}}</div>
+          <div>Maximum Temperature</div>
+          <div>{{temperatureArray[0].maxTemperature}}</div>------------------------------------------------
+          <h4>Forecast for the next 4 days</h4>
+          <div v-for="(temperatureArray, index) of temperatureArray.slice(1)" :key="index">
+            <div>Minimum Temperature</div>
+            <div>{{temperatureArray.minTemperature}}</div>
+            <div>Maximum Temperature</div>
+            <div>{{temperatureArray.maxTemperature}}</div>-----------------------------------------------
           </div>
-        </v-card-title>
-
-        <v-card-actions>
-
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
-    <ul>{{forecast.data.list}}</ul>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    export default {
-        name:"forecast",
-        data() {
-            return {
-                forecast: null,
-                APIKEY: 'b0e69868ecc23a85343afa989e34cb84'
-            }
-        },
-        created() {
-            this.fetchData();
-        },
-        methods: {
-            fetchData () {
-            axios
-                .get('http://api.openweathermap.org/data/2.5/forecast?q=London,uk&units=metric&mode=json&cnt=2APPID=' + this.APIKEY)
-                .then(response => (this.forecast = response))
-            }
-        }
 import axios from "axios";
 export default {
   name: "forecast",
@@ -50,31 +35,53 @@ export default {
   tomorrow: {},
   data() {
     return {
+      APIKEY: "De4gSQukjG9OkTDNmm2kFMq8725A5yo2",
       forecast: null,
-      APIKEY: "b0e69868ecc23a85343afa989e34cb84"
+      temperatureArray: null,
+      todayArray: null,
+      current: "",
+      oslo: 254946
     };
   },
   created() {
     this.fetchData();
+    this.fetchCurrent();
   },
   methods: {
     fetchData() {
       axios
         .get(
-          "http://api.openweathermap.org/data/2.5/forecast?q=London,uk&units=metric&mode=json&APPID=" +
-            this.APIKEY
+          "http://dataservice.accuweather.com/forecasts/v1/daily/5day/" +
+            this.oslo +
+            ".json?apikey=" +
+            this.APIKEY +
+            "&metric=true"
         )
         .then(response => {
-          this.forecast = response;
-          var list = response.data.list;
-
-          var d = new Date(response.data.list[0].dt_txt);
-          console.log(d.getHours());
-          //list.length
-          for (let i = 0; i < 4; i++) {
-              console.log(list.[i].dt_txt);
-
-          }
+          this.forecast = response.data.DailyForecasts;
+          const result = this.forecast.map(forecast => {
+            return {
+              date: forecast.Date,
+              maxTemperature: forecast.Temperature.Maximum.Value,
+              minTemperature: forecast.Temperature.Minimum.Value,
+              iconNight: forecast.Day.IconPhrase,
+              iconDay: forecast.Night.IconPhrase
+            };
+          });
+          this.temperatureArray = result;
+        });
+    },
+    fetchCurrent() {
+      axios
+        .get(
+          "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/" +
+            this.oslo +
+            ".json?apikey=" +
+            this.APIKEY +
+            "&metric=true&details=true"
+        )
+        .then(response => {
+          this.current = response.data[0].Temperature.Value;
         });
     }
   }
