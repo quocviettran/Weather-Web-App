@@ -1,12 +1,25 @@
 <template>
   <div class="forecast">
+    <v-layout align-center justify-center>
+      <v-form ref="form">
+        <v-flex xs12 sm6 md3>
+          <v-text-field
+            class="centered-input text--darken-3 mt-3"
+            label="Location Name"
+            placeholder="location"
+            v-model="userInput"
+          ></v-text-field>
+          <v-btn @click="searchLocation">Search</v-btn>
+        </v-flex>
+      </v-form>
+    </v-layout>
     <v-layout>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-title primary-title>
             <div>Kvittering av:</div>
           </v-card-title>
-          <h1>Oslo</h1>
+          <h1>{{localizedName}}</h1>
           <h3>Todays forecast</h3>
           <div>Current Temperature {{current}}</div>------------------------------------------------
           <v-card-actions></v-card-actions>
@@ -39,8 +52,13 @@ export default {
       forecast: null,
       temperatureArray: null,
       todayArray: null,
-      current: "",
-      oslo: 254946
+      current: null,
+      locationSearch: null,
+      userInput: "",
+      key: 254946,
+      localizedName: "Oslo",
+      latitude: "",
+      longtitude: ""
     };
   },
   created() {
@@ -52,7 +70,7 @@ export default {
       axios
         .get(
           "http://dataservice.accuweather.com/forecasts/v1/daily/5day/" +
-            this.oslo +
+            this.key +
             ".json?apikey=" +
             this.APIKEY +
             "&metric=true"
@@ -75,13 +93,32 @@ export default {
       axios
         .get(
           "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/" +
-            this.oslo +
+            this.key +
             ".json?apikey=" +
             this.APIKEY +
             "&metric=true&details=true"
         )
         .then(response => {
           this.current = response.data[0].Temperature.Value;
+        });
+    },
+    searchLocation() {
+      axios
+        .get(
+          "http://dataservice.accuweather.com/locations/v1/cities/search?" +
+            "apikey=" +
+            this.APIKEY +
+            "&q=" +
+            this.userInput
+        )
+        .then(response => {
+          this.locationSearch = response;
+          this.key = this.locationSearch.data[0].Key;
+          this.localizedName = this.locationSearch.data[0].LocalizedName;
+          this.latitude = this.locationSearch.data[0].GeoPosition.Latitude;
+          this.longtitude = this.locationSearch.data[0].GeoPosition.Longtitude;
+          this.fetchData();
+          this.fetchCurrent();
         });
     }
   }
