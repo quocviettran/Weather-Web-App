@@ -14,14 +14,12 @@
 
 
 <script>
-/* import Components here */
-// @ is an alias to /src
 import LandingPage from "@/components/LandingPage/LandingPage.vue";
 import leaflet from "@/components/leaflet/leaflet.vue";
+import Forecast from "@/components/Forecast/Forecast.vue";
 
 export default {
- 
-  name: "home",
+   name: "home",
   /*Add components*/
   data() {
     return {
@@ -31,10 +29,9 @@ export default {
   },
   components: {
     LandingPage,
+    Forecast,
     leaflet
-    
-  },
-
+  }
 };
 </script>
 <style>
