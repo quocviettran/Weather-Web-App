@@ -4,12 +4,13 @@
       <v-form ref="form">
         <v-layout row wrap>
           <v-text-field
+            @keyup.enter="searchLocation()"
             class="centered-input text--darken-3 mt-3"
             label="Location Name"
             placeholder="location"
             v-model="userInput"
           ></v-text-field>
-          <v-btn @click="searchLocation">Search</v-btn>
+          <v-btn @click="searchLocation()">Search</v-btn>
         </v-layout>
       </v-form>
     </v-layout>
@@ -19,12 +20,10 @@
       :temperatureArray="temperatureArray"
     />
     <leaflet
-      class="center"
-      v-bind:towns="{
-      name: localizedName,
-      lat: latitude,
-      lng: longtitude
-      }"
+      ref="leaflet_component"
+      :localizedName="localizedName"
+      :latitude="latitude"
+      :longitude="longitude"
     />
   </div>
 </template>
@@ -43,15 +42,15 @@ export default {
   data() {
     return {
       name: "forecast",
-      APIKEY: "NUymEiY6InvgzytEW6ZRQMi6XQglI91P",
+      APIKEY: "bU3YrXCADsTUOyElNTta8c9BPd7IvZmJ",
       temperatureArray: "",
-      temperatureNow: "",
+      temperatureNow: null,
       locationSearch: "",
       userInput: "",
       key: 254946,
       localizedName: "Oslo",
       latitude: 59.91,
-      longtitude: 10.75
+      longitude: 10.75
     };
   },
   created() {
@@ -70,8 +69,9 @@ export default {
         )
         .then(response => {
           const forecast = response.data.DailyForecasts;
-          const result = forecast.map(forecast => {
-            if (forecast.Day.Icon.toString.length === 2) {
+          this.temperatureArray = forecast.map(forecast => {
+            //Pre fix icon 
+            if (forecast.Day.Icon >= 10) {
               forecast.Day.Icon =
                 "https://developer.accuweather.com/sites/default/files/" +
                 forecast.Day.Icon +
@@ -82,17 +82,15 @@ export default {
                 forecast.Day.Icon +
                 "-s.png";
             }
+            //Pre fix date format
+            var date = new Date(forecast.Date);
+            forecast.Date = date.getDate() + "/" + (date.getMonth()+1); 
             return {
               date: forecast.Date,
-              averageTemperature:
-                (forecast.Temperature.Maximum.Value +
-                  forecast.Temperature.Minimum.Value) /
-                2,
+              maxTemperature: forecast.Temperature.Maximum.Value,
               iconDay: forecast.Day.Icon
             };
           });
-          this.temperatureArray = result;
-          console.log(this.temperatureArray);
         });
     },
     fetchCurrent() {
@@ -120,10 +118,11 @@ export default {
               response.data[0].WeatherIcon +
               "-s.png";
           }
+          //Run an update to leaflet component
+          this.$refs.leaflet_component.initMap();
         });
     },
     searchLocation() {
-      console.log("hei");
       axios
         .get(
           "http://dataservice.accuweather.com/locations/v1/cities/search?" +
@@ -138,7 +137,7 @@ export default {
             this.key = this.locationSearch.data[0].Key;
             this.localizedName = this.locationSearch.data[0].LocalizedName;
             this.latitude = this.locationSearch.data[0].GeoPosition.Latitude;
-            this.longtitude = this.locationSearch.data[0].GeoPosition.Longtitude;
+            this.longitude = this.locationSearch.data[0].GeoPosition.Longitude;
             // Fetch with location key
             this.fetchData();
             this.fetchCurrent();

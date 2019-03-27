@@ -3,58 +3,38 @@
     <div id="mapid"/>
   </div>
 </template>
- <!-- Make sure you put this AFTER Leaflet's CSS -->
-
 <script>
 import leaflet from "leaflet";
 
 export default {
   name: "leaf",
-  props: {
-    towns: Object
-  },
-  data() {
-    return {
-      mymap: null
-    };
-  },
+  props: ["localizedName", "latitude", "longitude"],
   mounted() {
     this.initMap();
   },
   methods: {
     initMap() {
       //Instansiate a map
-      this.mymap = leaflet
+      var container = leaflet.DomUtil.get("mapid");
+      if (container != null) {
+        container._leaflet_id = null;
+      }
+      let mymap = leaflet
         .map("mapid")
-        .setView([this.towns.lat, this.towns.lng], 10);
-
+        .setView([this.latitude, this.longitude], 14);
       //Instansiate a marker, and setting the start coordinate at Noroff
-      var marker = leaflet
-        .marker([this.towns.lat, this.towns.lng])
-        .addTo(this.mymap);
-      marker.bindPopup(this.towns.name).openPopup();
-
-      //Instansiate markers for all preloaded cities
-      //TODO Make for each
-      /* leaflet.marker([this.towns.lat, this.towns.lng])
-                    .addTo(mymap)
-                    .bindPopup(this.towns.name + "<br/>" + ' Temperature ' + this.towns.temperature)
-                    .openPopup();
-                */
+      var marker = leaflet.marker([this.latitude, this.longitude]).addTo(mymap);
+      marker.bindPopup(this.localizedName).openPopup();
 
       //Marker on the clicked coordinate
-      //TODOj
       let mark;
-      this.mymap.on("click", function(e) {
-        console.log(e.latlng);
-
-        //TODO: ASK TEAM
+      mymap.on("click", function(e) {
         if (mark != null) {
           mark.remove();
         }
         mark = leaflet.marker(e.latlng);
         mark
-          .addTo(this.mymap)
+          .addTo(mymap)
           .bindPopup()
           .openPopup();
       });
@@ -71,14 +51,13 @@ export default {
               "pk.eyJ1Ijoid29raW5nIiwiYSI6ImNqdHByejVjcjA3Nm80ZHIwZTgydDA0aWYifQ.A7Nu-j7baTtMJnjPzrTlNA"
           }
         )
-        .addTo(this.mymap);
+        .addTo(mymap);
     }, //End of initMap
 
+    removeMap(mymap) {
+      if (mymap != null) mymap.remove();
+    },
     changeLocation() {
-      this.towns.lat = 40.779;
-      this.towns.lng = -73.96;
-      this.towns.name = "New York";
-      this.mymap.remove();
       this.initMap();
     }
   }
